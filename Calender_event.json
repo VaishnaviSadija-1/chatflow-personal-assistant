@@ -1,0 +1,296 @@
+{
+  "name": "Calender_event.json",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -380,
+        -20
+      ],
+      "id": "37f9406f-a934-4572-a4a2-135ab31b5322",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "You are a smart Calendar Assistant who is good at making decision and ask only important questions with full access to view, create, update, and delete calendar events. \n\n🧠 Handle ambiguity by asking for clarification question.\n\n🛠 Tools:\n- Get Events\n- Create Event\n- Update Event\n- Delete Event\n- Get Many ( gives all the events scheduled in my calendar during a time period)"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -20
+      ],
+      "id": "24c4b488-b00f-41db-aa54-e9e942e03434",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-exp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        200
+      ],
+      "id": "4e17b049-5472-446c-aaa7-e79cc3cd19d7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Nvr68vKUNTq1i5f6",
+          "name": "Google Gemini(PaLM) Api account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to create an calendar event ",
+        "calendar": {
+          "__rl": true,
+          "value": "vaishnavisadija7@gmail.com",
+          "mode": "list",
+          "cachedResultName": "vaishnavisadija7@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -200,
+        200
+      ],
+      "id": "5ccb5d35-4895-48e7-9297-6d91f38ecd38",
+      "name": "CREATE",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "uExhkCEBoxCjyz76",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "vaishnavisadija7@gmail.com",
+          "mode": "list",
+          "cachedResultName": "vaishnavisadija7@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        200
+      ],
+      "id": "bb6d1765-2d63-4ca4-9f91-f73dd763550f",
+      "name": "DELETE",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "uExhkCEBoxCjyz76",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this when user wants to get details about calendar events ",
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "vaishnavisadija7@gmail.com",
+          "mode": "list",
+          "cachedResultName": "vaishnavisadija7@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        40,
+        200
+      ],
+      "id": "a0d7e9cb-8eba-4525-9f2b-c88e32c3643a",
+      "name": "GET",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "uExhkCEBoxCjyz76",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "vaishnavisadija7@gmail.com",
+          "mode": "list",
+          "cachedResultName": "vaishnavisadija7@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        200
+      ],
+      "id": "25628b48-9941-4b05-b71d-daf3a7b72f4f",
+      "name": "UPDATE",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "uExhkCEBoxCjyz76",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "vaishnavisadija7@gmail.com",
+          "mode": "list",
+          "cachedResultName": "vaishnavisadija7@gmail.com"
+        },
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        300,
+        200
+      ],
+      "id": "31f6e514-9ae8-444c-a439-2164f174bfc1",
+      "name": "Get many",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "uExhkCEBoxCjyz76",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "Event: Interview\nTime: June 30, 2025 4:00 PM – 5:00 PM\nAttendees: Vaishnavi (vaisnavisadija7@gmail.com), Jay\nDescription: None"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CREATE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DELETE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UPDATE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8b4e32e6-b09a-49b3-819f-a296cf05c2c0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3bf809bca3b36b04ac53a6dd78d008bcf9489132f51ad120b2c09d78c8a68d41"
+  },
+  "id": "GpDWWrlEKN4H9S57",
+  "tags": []
+}
