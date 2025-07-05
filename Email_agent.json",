@@ -1,0 +1,170 @@
+{
+  "name": "Email_agent.json",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0bf577d5-138c-4e44-be5a-ad40f3f56430",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "You are a helpful assistant that can handle email communication.\n\n🛠 You have two tools:\na) SEND tool – to send emails (you create subject & message)\nb) GET tool – to fetch unread emails\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "872d9bd2-d1c4-4585-bcc2-67c9626f76ae",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this when user ask you to send an email",
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        260
+      ],
+      "id": "ba274aa9-1994-44f3-b7dd-b8dc889bd0da",
+      "name": "SEND",
+      "webhookId": "b97ffe39-2622-4db6-8e86-f38be937a66d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tZHwr3A645Jo3EJ6",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-exp",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        120,
+        260
+      ],
+      "id": "dccfeb09-95d7-45aa-94ea-1f0a1a943868",
+      "name": "GEMINI",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "kuz9NHEAV14jVrmT",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this when you want to retrieve the emails",
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "readStatus": "unread"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        260
+      ],
+      "id": "dd0227e6-6f57-4d46-b186-6a1b2dfd06a0",
+      "name": "GET",
+      "webhookId": "9513491c-a0ba-4542-98f6-1dbbd445aa49",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tZHwr3A645Jo3EJ6",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEND": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GEMINI": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "59292309-0ca3-4d04-9485-1df20740dcfe",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3bf809bca3b36b04ac53a6dd78d008bcf9489132f51ad120b2c09d78c8a68d41"
+  },
+  "id": "JNoMZNotfNMsHPwF",
+  "tags": []
+}
