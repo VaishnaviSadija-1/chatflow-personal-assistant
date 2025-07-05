@@ -62,16 +62,8 @@ A smart, no-code automation system built with **n8n** that transforms WhatsApp i
 
 ---
 
-## 📸 Visual Walkthrough
-
-### 🎥 Video Demo  
-👉 [Watch Demo on Loom](#) *(Add your Loom video link here)*
 
 ### 🖼️ Screenshots  
 ![Workflow Overview](./screenshots/workflow-overview.png)  
 ![WhatsApp Chat](./screenshots/whatsapp-chat.png)
-
----
-
-## 🗂️ Folder Structure
 
